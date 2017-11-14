@@ -18,13 +18,16 @@ public class MultithreadSortedArray {
         SortingThreadPool threadPool = new SortingThreadPool(THREAD_COUNT, arr);
         threadPool.startThreads();
         threadPool.waitAllThreads();
-        return arr;
+
+        return new MergedArray(
+                new SplittedArrays(arr, threadPool.intervals()).get()
+        ).get();
     }
+
 
     public static void main(String[] args) {
         int[] arr = {4, 6, 2, 1, 9, -70, 8, 22, 0, 43, 5, 3};
-        new MultithreadSortedArray(arr).get();
-        System.out.println(Arrays.toString(arr));
+        System.out.println(Arrays.toString(new MultithreadSortedArray(arr).get()));
     }
 }
 

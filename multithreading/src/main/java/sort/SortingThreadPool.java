@@ -27,6 +27,14 @@ public class SortingThreadPool {
         return threads;
     }
 
+    public List<SortingInterval> intervals() {
+        List<SortingInterval> result = new ArrayList<>();
+        for (int i = 0; i < threadCount; i++) {
+            result.add(new SortingInterval(i, threadCount, arr.length));
+        }
+        return result;
+    }
+
     public void startThreads() {
         for (Thread thread : threads) {
             thread.start();
