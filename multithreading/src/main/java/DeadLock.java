@@ -5,37 +5,13 @@ public class DeadLock {
         B b = new B();
         a.setB(b);
         b.setA(a);
-        new Thread1(a).start();
-        new Thread2(b).start();
+        new Thread(() -> a.printBCount()).start();
+        new Thread(() -> b.printACount()).start();
 
     }
 }
 
-class Thread1 extends Thread {
-    private A a;
 
-    public Thread1(A a) {
-        this.a = a;
-    }
-
-    @Override
-    public void run() {
-        a.printBCount();
-    }
-}
-
-class Thread2 extends Thread {
-    private B b;
-
-    public Thread2(B b) {
-        this.b = b;
-    }
-
-    @Override
-    public void run() {
-        b.printACount();
-    }
-}
 
 class A {
     private Integer count;
@@ -50,8 +26,13 @@ class A {
     }
 
     public synchronized void printBCount() {
-        System.out.println("start print B count");
-        b.printBCount();
+        try {
+            Thread.sleep(200);
+            System.out.println("start print B count");
+            b.printBCount();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public synchronized void printACount() {
