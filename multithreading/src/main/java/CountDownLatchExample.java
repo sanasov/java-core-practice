@@ -1,4 +1,6 @@
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class CountDownLatchExample {
 
@@ -8,20 +10,26 @@ public class CountDownLatchExample {
         CountDownLatch countDownLatch = new CountDownLatch(LACTH_COUNT);
         ThreadLocal<Integer> threadLocal = ThreadLocal.withInitial(() -> 0);
         Runnable runnable = () -> {
-            for (int i = 0; i < 34; i++) {
+            for (int i = 1; i <= 25; i++) {
                 countDownLatch.countDown();
                 threadLocal.set(i);
             }
             System.out.println("FINISH " + Thread.currentThread().getName());
             System.out.println(Thread.currentThread().getName() + "\tthreadLocal = " + threadLocal.get());
         };
-        new Thread(runnable).start();
-        new Thread(runnable).start();
-        new Thread(runnable).start();
-
+        ExecutorService fixThreadPool = Executors.newFixedThreadPool(10);
+        fixThreadPool.submit(runnable);
+        fixThreadPool.submit(runnable);
+        fixThreadPool.submit(runnable);
+        fixThreadPool.submit(runnable);
+//        new Thread(runnable).start();
+//        new Thread(runnable).start();
+//        new Thread(runnable).start();
+//        new Thread(runnable).start();
         countDownLatch.await();
 
         System.out.println("FINISH " + Thread.currentThread().getName());
         System.out.println(Thread.currentThread().getName() + "\tthreadLocal = " + threadLocal.get());
+        fixThreadPool.shutdown();
     }
 }
