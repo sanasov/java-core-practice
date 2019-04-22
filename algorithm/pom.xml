@@ -4,12 +4,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ru.igrey.dev</groupId>
-    <artifactId>multithreading</artifactId>
+    <artifactId>algorithm</artifactId>
     <version>1.0</version>
     <packaging>pom</packaging>
 
-    <name>multithreading</name>
-    <description>Здесь разбираются задачи по multithreading</description>
 
     <parent>
         <groupId>ru.igrey.dev</groupId>
@@ -17,15 +15,17 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
+    <name>algorithm</name>
+    <description>Здесь разбираются задачи по algorithm</description>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.16.10</version>
+            <version>1.18.6</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -49,6 +49,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.0</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
