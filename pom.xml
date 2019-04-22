@@ -16,6 +16,7 @@
 
     <modules>
         <module>multithreading</module>
+        <module>algorithm</module>
     </modules>
 
     <dependencies>
