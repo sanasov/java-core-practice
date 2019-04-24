@@ -1,4 +1,4 @@
-package ru.igrey.dev.yandex;
+package ru.igrey.dev.common;
 
 public class Fibonacci {
     public static void main(String[] args) {

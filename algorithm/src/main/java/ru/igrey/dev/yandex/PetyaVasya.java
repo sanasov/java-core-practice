@@ -6,6 +6,7 @@ public class PetyaVasya {
     public static void main(String[] args) {
         System.out.println(findWiner());
     }
+
     private static String findWiner() {
         Integer sumPetya = cards[0];
         Integer sumVasya = cards[1];
