@@ -1,25 +1,27 @@
 package ru.igrey.dev.common;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class Fibonacci {
     public static void main(String[] args) {
-        System.out.println(fib2(8));
-        System.out.println(fibCycle(55));
-        System.out.println(fib1(3));
+        System.out.println(fibLinear(8));
+        System.out.println(fibLinearRecursive(55));
+        System.out.println(fibExponentRecursive(5));
 
     }
 
-    private static int fib1(int n) {
+    private static int fibExponentRecursive(int n) {
         if (n == 0) {
             return 0;
         }
         if (n == 1) {
             return 1;
         }
-        int i = fib1(n - 1) + fib1(n - 2);
-        return i;
+        return fibExponentRecursive(n - 1) + fibExponentRecursive(n - 2);
     }
 
-    private static int fibCycle(int n) {
+    private static int fibLinear(int n) {
         if (n == 0) {
             return 0;
         }
@@ -37,7 +39,7 @@ public class Fibonacci {
         return fn;
     }
 
-    private static int fib2(int n) {
+    private static int fibLinearRecursive(int n) {
         if (n == 0) {
             return 0;
         }
@@ -52,5 +54,24 @@ public class Fibonacci {
             return fn2 + fn1;
         }
         return fib2(n - 1, fn1, fn2 + fn1);
+    }
+
+    private List<String> bipowMatrix0111(int n) {
+        List<String> fibmatrix = Arrays.asList("0 1", "1 1");
+        if (n == 0) {
+            return Arrays.asList("1 0", "0 1");
+        }
+        if (n == 1) {
+            return fibmatrix;
+        }
+        if (n % 2 == 0) {
+            return multiple(bipowMatrix0111(n / 2), bipowMatrix0111(n / 2));
+        } else {
+            return multiple(multiple(fibmatrix, bipowMatrix0111((n - 1) / 2)), bipowMatrix0111((n - 1) / 2));
+        }
+    }
+
+    List<String> multiple(List<String> a, List<String> b) {
+        return null;
     }
 }
