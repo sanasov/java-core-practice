@@ -13,6 +13,7 @@ public class MedianaVsAvg {
         }
         Arrays.sort(arr);
         System.out.println(Arrays.toString(arr));
+
         return arr[arr.length / 2];
     }
 
