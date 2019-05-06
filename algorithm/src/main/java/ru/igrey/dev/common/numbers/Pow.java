@@ -1,4 +1,4 @@
-package ru.igrey.dev.common;
+package ru.igrey.dev.common.numbers;
 
 public class Pow {
     public static void main(String[] args) {

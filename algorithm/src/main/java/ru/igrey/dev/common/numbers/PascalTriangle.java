@@ -1,4 +1,4 @@
-package ru.igrey.dev.common;
+package ru.igrey.dev.common.numbers;
 
 import java.math.BigDecimal;
 import java.util.Arrays;

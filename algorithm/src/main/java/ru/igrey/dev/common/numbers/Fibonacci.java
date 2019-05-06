@@ -1,4 +1,4 @@
-package ru.igrey.dev.common;
+package ru.igrey.dev.common.numbers;
 
 import java.util.Arrays;
 import java.util.List;
