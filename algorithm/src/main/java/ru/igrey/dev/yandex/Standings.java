@@ -55,27 +55,34 @@ public class Standings {
     }
 
     private void setFirstPlace() {
-        int maxScore = teams.values().stream().mapToInt(Team::totalScores).max().getAsInt();
-        first = teams.values().stream().filter(t -> t.totalScores() == maxScore).collect(Collectors.toList());
+        Team firstTeam = teams.values().stream().max(Comparator.comparing(Team::totalScores).thenComparing(Team::winsCount)).get();
+        first = teams.values().stream()
+                .filter(t -> t.totalScores() == firstTeam.totalScores())
+                .filter(t -> t.winsCount() == firstTeam.winsCount())
+                .collect(Collectors.toList());
     }
 
     private void setSecondPlace() {
-        if (second != null) {
+        Team secondTeam = teams.values().stream().filter(t -> !first.contains(t)).max(Comparator.comparing(Team::totalScores).thenComparing(Team::winsCount)).orElse(null);
+        if (secondTeam == null) {
             return;
         }
-        int maxScore = teams.values().stream().mapToInt(Team::totalScores).max().getAsInt();
-        int secondMaxScore = teams.values().stream().filter(t -> t.totalScores() < maxScore).mapToInt(Team::totalScores).max().orElse(0);
-        second = teams.values().stream().filter(t -> t.totalScores() == secondMaxScore).collect(Collectors.toList());
+        second = teams.values().stream()
+                .filter(t -> t.totalScores() == secondTeam.totalScores())
+                .filter(t -> t.winsCount() == secondTeam.winsCount())
+                .collect(Collectors.toList());
     }
 
     private void setThirdPlace() {
-        if (third != null) {
+        if(second == null) return;
+        Team thirdTeam = teams.values().stream().filter(t -> !first.contains(t) && !second.contains(t)).max(Comparator.comparing(Team::totalScores).thenComparing(Team::winsCount)).orElse(null);
+        if (thirdTeam == null) {
             return;
         }
-        int maxScore = teams.values().stream().mapToInt(Team::totalScores).max().getAsInt();
-        int secondMaxScore = teams.values().stream().filter(t -> t.totalScores() < maxScore).mapToInt(Team::totalScores).max().orElse(0);
-        int thirdMaxScore = teams.values().stream().filter(t -> t.totalScores() < secondMaxScore).mapToInt(Team::totalScores).max().orElse(0);
-        third = teams.values().stream().filter(t -> t.totalScores() == thirdMaxScore).collect(Collectors.toList());
+        third = teams.values().stream()
+                .filter(t -> t.totalScores() == thirdTeam.totalScores())
+                .filter(t -> t.winsCount() == thirdTeam.winsCount())
+                .collect(Collectors.toList());
     }
 
     public static void main(String[] args) {
@@ -140,6 +147,10 @@ class Team {
 
     int totalScores() {
         return rivalMap.values().stream().mapToInt(GameResult::score).sum();
+    }
+
+    int winsCount() {
+        return (int) rivalMap.values().stream().filter(gr -> gr == GameResult.W).count();
     }
 
     void printRow(List<Team> sortedTeams) {
