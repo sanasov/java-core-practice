@@ -85,21 +85,21 @@ public class Standings {
                 .collect(Collectors.toList());
     }
 
-    public static void main(String[] args) {
-        List<String> in1 = Arrays.asList(
-                "Linux - Gentoo - 1:0",
-                "Gentoo - Windows - 2:1",
-                "Linux - Windows - 0:2");
-        List<String> in2 = Arrays.asList(
-                "Cplusplus - C - 1:0",
-                "Cplusplus - Php - 2:0",
-                "Java - Php - 1:0",
-                "Java - C - 2:2",
-                "Java - Perl - 1:1",
-                "Java - Haskell - 1:1");
-        new Standings(in1).print();
-        new Standings(in2).print();
-    }
+//    public static void main(String[] args) {
+//        List<String> in1 = Arrays.asList(
+//                "Linux - Gentoo - 1:0",
+//                "Gentoo - Windows - 2:1",
+//                "Linux - Windows - 0:2");
+//        List<String> in2 = Arrays.asList(
+//                "Cplusplus - C - 1:0",
+//                "Cplusplus - Php - 2:0",
+//                "Java - Php - 1:0",
+//                "Java - C - 2:2",
+//                "Java - Perl - 1:1",
+//                "Java - Haskell - 1:1");
+//        new Standings(in1).print();
+//        new Standings(in2).print();
+//    }
 
     private void printTableBorder() {
         int teamCount = teams.size();
