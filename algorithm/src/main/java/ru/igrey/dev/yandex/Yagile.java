@@ -3,6 +3,7 @@ package ru.igrey.dev.yandex;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.TreeSet;
 
 public class Yagile {
     int taskCount;
@@ -11,34 +12,29 @@ public class Yagile {
     int[] deadlines;
 
     public Yagile(String row1, String row2) {
-        this.taskCount = Integer.valueOf(row1.split(" ")[0].replaceAll("[^\\d]", ""));
-        this.pushInterval = Integer.valueOf(row1.split(" ")[1].replaceAll("[^\\d]", ""));
-        this.k = Integer.valueOf(row1.split(" ")[2].replaceAll("[^\\d]", ""));
+        String[] row1cols = row1.split(" ");
+        this.taskCount = Integer.valueOf(row1cols[0]);
+        this.pushInterval = Integer.valueOf(row1cols[1]);
+        this.k = Integer.valueOf(row1cols[2]);
         String[] deadlinesAsString = row2.split(" ");
         deadlines = new int[taskCount];
         for (int i = 0; i < taskCount; i++) {
-            deadlines[i] = Short.valueOf(deadlinesAsString[i]);
+            deadlines[i] = Integer.valueOf(deadlinesAsString[i]);
         }
     }
 
-    public int countDay() {
-        int ignoreCount = 0;
-        int totalDays = 0;
-        while (ignoreCount < k) {
-            boolean isRobotIgnored = false;
+    public long countDay() {
+        TreeSet<Long> notifyDays = new TreeSet<>();
+        long ignoreCount = 0L;
+        while (notifyDays.size() < (taskCount - 1) * k) {
             for (int i = 0; i < taskCount; i++) {
-                deadlines[i] = deadlines[i] - 1;
-                if (deadlines[i] == 0 || (deadlines[i] < 0 && deadlines[i] % pushInterval == 0)) {
-                    isRobotIgnored = true;
-
-                }
+                System.out.println("task_" + i + " " + (pushInterval * ignoreCount + deadlines[i]));
+                notifyDays.add(pushInterval * ignoreCount + deadlines[i]);
             }
-            if (isRobotIgnored) {
-                ignoreCount++;
-            }
-            totalDays++;
+            ignoreCount++;
         }
-        return totalDays;
+        System.out.println(notifyDays);
+        return (long) notifyDays.toArray()[k - 1];
     }
 
 
@@ -49,5 +45,6 @@ public class Yagile {
     public static void main(String[] args) throws IOException {
         String[] rows = readFileAsString().split("\n");
         System.out.println(new Yagile(rows[0], rows[1]).countDay());
+        System.out.println((long) (Integer.MAX_VALUE) * 2);
     }
 }
