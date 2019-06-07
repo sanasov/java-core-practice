@@ -27,10 +27,21 @@ public class Yagile {
         TreeSet<Long> notifyDays = new TreeSet<>();
         long ignoreCount = 0L;
         while (notifyDays.size() < (taskCount - 1) * k) {
+            long max = notifyDays.size() < k ? 0 : (long) notifyDays.toArray()[k - 1];
+            boolean allCurrElmMoreThanPrevMax = true;
             for (int i = 0; i < taskCount; i++) {
-                System.out.println("task_" + i + " " + (pushInterval * ignoreCount + deadlines[i]));
+            System.out.println("task_" + i + " " + (pushInterval * ignoreCount + deadlines[i]));
                 notifyDays.add(pushInterval * ignoreCount + deadlines[i]);
+                if (max > pushInterval * ignoreCount + deadlines[i]) {
+                    allCurrElmMoreThanPrevMax = false;
+                }
             }
+
+            if (allCurrElmMoreThanPrevMax && notifyDays.size() > k && max > 0) {
+                break;
+            }
+            System.out.println(notifyDays);
+            System.out.println("=========");
             ignoreCount++;
         }
         System.out.println(notifyDays);
@@ -45,6 +56,5 @@ public class Yagile {
     public static void main(String[] args) throws IOException {
         String[] rows = readFileAsString().split("\n");
         System.out.println(new Yagile(rows[0], rows[1]).countDay());
-        System.out.println((long) (Integer.MAX_VALUE) * 2);
     }
 }
