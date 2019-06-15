@@ -8,7 +8,7 @@ public class SemaphoreDemo {
     private static int b = 0;
     private static Resource resource = new Resource();
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         CyclicBarrier cb = new CyclicBarrier(2, () -> {
             System.out.println(a);
             System.out.println(b);
@@ -40,9 +40,6 @@ public class SemaphoreDemo {
         Thread thread2 = new Thread(task);
         thread1.start();
         thread2.start();
-        thread1.join();
-        thread2.join();
-
     }
 
     static class Resource {
