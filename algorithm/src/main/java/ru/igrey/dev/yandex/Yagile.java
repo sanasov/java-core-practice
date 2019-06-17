@@ -57,7 +57,7 @@ public class Yagile {
         for (int ignoreCount = 0; ignoreCount < k; ignoreCount++) {
             long last = notifyDays.size() < k ? -1 : notifyDays.last();
             for (int i = 0; i < taskCount; i++) {
-                long notifyDay = (long) pushInterval * ignoreCount + deadlines[i];
+                long notifyDay = pushInterval * ignoreCount + deadlines[i];
                 if (notifyDay > last && notifyDays.size() == k && last > 0) {
                     continue;
                 }
@@ -77,27 +77,27 @@ public class Yagile {
     }
 
 
-    public long countDay3() {
+    public long countDay() {
         Arrays.sort(deadlines);
-        findNOK();
         removeDoublesOfSortedArray();
         Arrays.sort(deadlines);
         long minElm = deadlines[0];
+        if (pushInterval == 1) {
+            return minElm + k - 1;
+        }
         int count = 1;
+        deadlines[0] += pushInterval;
         while (count < k) {
             if (arrLength < taskCount && minElm + pushInterval >= deadlines[arrLength]) {
                 arrLength++;
             }
             while (arrLength < taskCount && minElm + pushInterval < deadlines[arrLength]) {
                 int minInd = minInd(arrLength);
-                if (minElm == deadlines[minInd]) {
-                    deadlines[minInd] += pushInterval;
-                    continue;
-                }
                 minElm = deadlines[minInd];
-                deadlines[minInd] += pushInterval;
-                count++;
-                if (count == k) {
+                long koeff = koeff(minElm, min2Ind(arrLength), count);
+                deadlines[minInd] += koeff * pushInterval;
+                count += koeff;
+                if (count >= k) {
                     return minElm;
                 }
             }
@@ -106,14 +106,11 @@ public class Yagile {
             }
             if (arrLength == taskCount) {
                 int minInd = minInd(arrLength);
-                if (minElm == deadlines[minInd]) {
-                    deadlines[minInd] += pushInterval;
-                    continue;
-                }
                 minElm = deadlines[minInd];
-                deadlines[minInd] += pushInterval;
-                count++;
-                if (count == k) {
+                long koeff = koeff(minElm, min2Ind(arrLength), count);
+                deadlines[minInd] += koeff * pushInterval;
+                count += koeff;
+                if (count >= k) {
                     return minElm;
                 }
             }
@@ -122,33 +119,33 @@ public class Yagile {
         return minElm;
     }
 
-    public void removeDoublesOfSortedArray() {
-        int i = 0;
-        int doublesCount = 0;
-        while (i < taskCount - 1) {
-            if (deadlines[i] == deadlines[i + 1]) {
-                deadlines[i] = Long.MAX_VALUE;
-                doublesCount++;
-            }
-            i++;
+    private long koeff(long minElm, int min2Ind, int count) {
+        if (min2Ind == -1) {
+            return (k - count) / pushInterval <= 1 ? 1 : (k - count) / pushInterval;
         }
-        taskCount = taskCount - doublesCount;
-        Arrays.sort(deadlines);
+        long koeff = (deadlines[min2Ind] - minElm) / pushInterval;
+        if (koeff <= 1 || k == count) {
+            return 1;
+        }
+        if (koeff >= k - count) {
+            return k - count;
+        }
+        return koeff;
     }
 
-    public void findNOK() {
-        long min = Long.MAX_VALUE;
+    public void removeDoublesOfSortedArray() {
+        int count = 0;
         for (int i = 0; i < taskCount; i++) {
-            if (deadlines[i] % pushInterval == 0 && deadlines[i] < min) {
-                min = deadlines[i];
+            if(deadlines[i] == Long.MAX_VALUE) continue;
+            for (int j = i + 1; j < taskCount; j++) {
+                if(deadlines[j] == Long.MAX_VALUE) continue;
+                if ((deadlines[j] - deadlines[i]) % pushInterval == 0 && deadlines[j] != Long.MAX_VALUE) {
+                    deadlines[j] = Long.MAX_VALUE;
+                    count++;
+                }
             }
         }
-        for (int i = 0; i < taskCount; i++) {
-            if (deadlines[i] % pushInterval == 0) {
-                deadlines[i] = min;
-            }
-        }
-        System.out.println(min);
+        taskCount -= count;
     }
 
     private int minInd(int length) {
@@ -163,13 +160,28 @@ public class Yagile {
         return minInd;
     }
 
+    private int min2Ind(int length) {
+        int minInd = minInd(length);
+        long min2 = Long.MAX_VALUE;
+        int min2Ind = -1;
+        for (int i = 1; i < length; i++) {
+            if (min2 > deadlines[i] && deadlines[minInd] != deadlines[i]) {
+                min2 = deadlines[i];
+                min2Ind = i;
+            }
+        }
+        return min2Ind;
+
+    }
+
+
     public static String readFileAsString() throws IOException {
         return new String(Files.readAllBytes(Paths.get("/home/sanasov/ownprojects/java-core-practice/algorithm/src/main/resources/input.txt")));
     }
 
     public static void main(String[] args) throws IOException {
         String[] rows = readFileAsString().split("\n");
-//        System.out.println(new Yagile(rows[0], rows[1]).countDay2());
-        System.out.println(new Yagile(rows[0], rows[1]).countDay3());
+        System.out.println(new Yagile(rows[0], rows[1]).countDay());
+        System.out.println(new Yagile(rows[0], rows[1]).countDay2());
     }
 }
