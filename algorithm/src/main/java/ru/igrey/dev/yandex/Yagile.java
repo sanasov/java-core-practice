@@ -95,6 +95,7 @@ public class Yagile {
                 int minInd = minInd(arrLength);
                 minElm = deadlines[minInd];
                 long koeff = koeff(minElm, min2Ind(arrLength), count);
+                System.out.println(koeff);
                 deadlines[minInd] += koeff * pushInterval;
                 count += koeff;
                 if (count >= k) {
@@ -164,7 +165,7 @@ public class Yagile {
         int minInd = minInd(length);
         long min2 = Long.MAX_VALUE;
         int min2Ind = -1;
-        for (int i = 1; i < length; i++) {
+        for (int i = 0; i < length; i++) {
             if (min2 > deadlines[i] && deadlines[minInd] != deadlines[i]) {
                 min2 = deadlines[i];
                 min2Ind = i;
