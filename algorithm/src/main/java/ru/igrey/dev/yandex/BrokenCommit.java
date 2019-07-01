@@ -22,21 +22,28 @@ public class BrokenCommit {
             System.out.flush();
             return;
         }
-        int step = commitCountInInterval / 4;
-        for (int i = 0; i < 3; i++) {
-            commitNumbers[i] = start - 1 + (i + 1) * step;
+        int step = commitCountInInterval / 5;
+        int ostatok = commitCountInInterval % 5;
+        if (ostatok > 0) {
+            commitNumbers[0] = start + step;
+            ostatok--;
+        } else {
+            commitNumbers[0] = start - 1 + step;
+        }
+        System.out.print(commitNumbers[0] + " ");
+        for (int i = 1; i < 4; i++) {
+            if (ostatok > 0) {
+                commitNumbers[i] = commitNumbers[i - 1] + step + 1;
+                ostatok--;
+            } else {
+                commitNumbers[i] = commitNumbers[i - 1] + step;
+            }
             System.out.print(commitNumbers[i] + " ");
         }
-        commitNumbers[3] = end;
-        System.out.print(end + "\n");
+        System.out.println();
         System.out.flush();
     }
 
-    private static void calcIntervalBySectionNumberOfBrokenCommit(int sectionNumber) {
-        int commitCountInInterval = end - start + 1;
-        start = start + commitCountInInterval / 4 * sectionNumber;
-        end = sectionNumber == 3 ? end : (start - 1) + commitCountInInterval / 4;
-    }
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -46,13 +53,17 @@ public class BrokenCommit {
         end = commitCount;
         for (int requestNumber = 1; requestNumber <= MAX_REQUESTS; requestNumber++) {
             createRequest();
-            int sectionNumber = scanner.nextLine().replace(" ", "").indexOf("0");
+            int sectionIndex = scanner.nextLine().replace(" ", "").indexOf("0");
+            if (sectionIndex == -1) {
+                sectionIndex = 4;
+            }
             if (end - start < 4) {
-                System.out.println("! " + (start + sectionNumber));
+                System.out.println("! " + (start + sectionIndex));
                 System.out.flush();
                 return;
             }
-            calcIntervalBySectionNumberOfBrokenCommit(sectionNumber);
+            start = sectionIndex == 0 ? start : commitNumbers[sectionIndex - 1];
+            end = sectionIndex == 4 ? end : commitNumbers[sectionIndex];
         }
         System.out.println("! " + start);
         System.out.flush();
