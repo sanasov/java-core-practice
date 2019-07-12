@@ -1,0 +1,32 @@
+1) merge vs rebase
+2) beanFactory factoryBean
+3) hibernate cache: https://habr.com/ru/post/135176/
+					I. First level (привязан к объекту сессии: 2 session.load() подряд), 
+					II. Second level (привязан к объекту-фабрике сессий: 2 sessionFactory().openSession().load(), видимость кеша шире (Ecache), зависимости не кэшируются, сначала берем кэш I), 
+					III. Query cache (привязан к объекту-фабрике сессий: key= query+param, value = list of entites id)
+что такое кэш регион?
+
+
+4) What inheritance mapping strategies are available in Hibernate?
+					Hibernate have 3 ways of inheritance mapping, They are
+					Table per hierarchy
+					Table per concrete class
+					Table per subclass
+
+5) ServletContextListener run your code before the web application is started.
+
+6) CascadeType 		В каждой связи есть понятие владелец и владеемый. 
+					Владельца к аннотации @OneToOne добавляется так же параметр cascade,  который говорит JPA, что делать с владеемыми объектами при операциях над владельцем.
+
+7) JMM 				https://habr.com/ru/post/143237/
+					Запись и чтение переменной в одном потоке не гарантирует правильный и мгновенный результат в другом потоке. Гарантии предоставляются JMM
+
+	Happens before	A happens-before B означает, что все изменения, выполненные потоком X до момента операции A и изменения,
+					которые повлекла эта операция, видны потоку Y в момент выполнения операции B и после выполнения этой операции.
+					1) в одном потоке всегда  hb(A, B)
+					2) если A в блоке sync, а B идет после, то hb(A, B)
+					3) A call to start() on a thread happens-before any actions in the started thread
+					4) A write to a volatile field happens-before every subsequent read of that field.
+					5) Транзитивность: If hb(x, y) and hb(y, z), then hb(x, z).
+					6) All actions in a thread happen-before any other thread successfully returns from a join() on that thread.
+					7) An unlock on a monitor happens-before every subsequent lock on that monitor.

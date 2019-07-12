@@ -134,7 +134,7 @@ public class Yagile {
                 start = daysCount;
             }
             daysCount = (start + end) / 2;
-           System.out.println("start=" + start + " k=" + k + "\tdaysCount=" + daysCount);
+           System.out.println("start=" + start + "\tend=" + end + "\tdaysCount=" + daysCount + "\tk=" + k );
             k = k(daysCount);
         }
         while (true) {
